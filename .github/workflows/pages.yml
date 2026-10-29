@@ -1,0 +1,29 @@
+# بيتشغّل لحاله مع كل «نشر الأسعار» من برنامج جيبلي معاك: بيفك الصور وبينشر data/ وimg/ على GitHub Pages.
+name: publish
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p site/img
+          for z in imgzip/*.zip; do [ -f "$z" ] && unzip -qo "$z" -d site/img; done
+          [ -d data ] && cp -r data site/
+          touch site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - uses: actions/deploy-pages@v4
