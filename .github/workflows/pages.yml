@@ -23,7 +23,6 @@ jobs:
           mkdir -p site/img
           for z in imgzip/*.zip; do [ -f "$z" ] && unzip -qo "$z" -d site/img; done
           [ -d data ] && cp -r data site/
-          [ -d m ] && cp -r m site/  # v0.17.13 موديل شيل الخلفية لشاشة المدير
           touch site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
